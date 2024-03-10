@@ -56,15 +56,18 @@ function App() {
   );
 }
 // web pack (Module Bundler) always searches for resources only in public folder..
-function Pizza(props) {
-  console.log(props);
+function Pizza({ pizzaObj }) {
+  console.log(pizzaObj);
+  // if (pizzaObj.soldOut) {
+  //   return null;
+  // } else
   return (
-    <div className="pizza">
-      <img src={props.pizzaObj.photoName} alt="pizza" />
+    <div className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObj.photoName} alt="pizza" />
       <li>
-        <h2>{props.pizzaObj.name}</h2>
-        <h4>{props.pizzaObj.price}</h4>
-        <p>{props.pizzaObj.ingredients}</p>
+        <h2>{pizzaObj.name}</h2>
+        <p>{pizzaObj.ingredients}</p>
+        <h4>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</h4>
       </li>
     </div>
   );
@@ -78,24 +81,37 @@ function Header() {
   );
 }
 function Menu() {
+  const pizzas = pizzaData;
+  const numLength = pizzas.length;
   return (
     <div className="menu">
       <h2>Our MENU</h2>
-      <ul className="pizzas">
-        {pizzaData.map(
-          (
-            pizza //we cannot use forEach,because we acutally need all the jsx here, what map does it keeps all the jsx here,it is same as what writing each component one by one here means
-          ) => (
-            <Pizza pizzaObj={pizza} key={pizza.name} />
-          )
-        )}
-      </ul>
+
+      {numLength > 0 && (
+        <>
+          <p>Authentic italian cusine </p>
+          <ul className="pizzas">
+            {pizzaData.map(
+              (
+                pizza //we cannot use forEach,because we acutally need all the jsx here, what map does it keeps all the jsx here,it is same as what writing each component one by one here means
+              ) => (
+                <Pizza pizzaObj={pizza} key={pizza.name} />
+              )
+            )}
+          </ul>
+        </>
+      )}
     </div>
   );
 }
 function Footer() {
   return (
-    <div className="footer">{new Date().toLocaleTimeString()}.We are open</div>
+    <div>
+      <p className="footer,order">
+        {new Date().toLocaleTimeString()}.We are open
+      </p>
+      <button className="btn">Order</button>
+    </div>
   );
 }
 //React v18 and upper
